@@ -16,8 +16,8 @@ def pca(dataMat,topNfeat=99999):
     eigValInd = eigValInd[:-(topNfeat+1):-1] #逆序
     redEigVects = eigVects[:,eigValInd] # n*k
     print 'red',shape(redEigVects)
-    lowDDataMat = meanRemoved * redEigVects # m*n n*k
-    reconMat = (lowDDataMat*redEigVects.T)+meanVals # m*k k*n
+    lowDDataMat = meanRemoved * redEigVects # PCA 降维 A(m*n)P(n*k) = A'(m*k)
+    reconMat = (lowDDataMat*redEigVects.T)+meanVals # 恢复高维数据 redEigVects为正交矩阵,所以矩阵转置等于矩阵逆
     print 'lowD',shape(lowDDataMat)
     return lowDDataMat,reconMat
 
