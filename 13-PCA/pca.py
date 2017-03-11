@@ -9,16 +9,16 @@ def loadDataSet(fileName,delim='\t'):
 
 def pca(dataMat,topNfeat=99999):
     meanVals = mean(dataMat)
+    print 'data',shape(dataMat)
     meanRemoved = dataMat-meanVals
     covMat = cov(meanRemoved,rowvar=0)
     eigVals,eigVects = linalg.eig(mat(covMat))
+     # print 'shape', shape(eigVects) eigVects n*n
     eigValInd = argsort(eigVals)
     eigValInd = eigValInd[:-(topNfeat+1):-1] #逆序
     redEigVects = eigVects[:,eigValInd] # n*k
-    print 'red',shape(redEigVects)
-    lowDDataMat = meanRemoved * redEigVects # PCA 降维 A(m*n)P(n*k) = A'(m*k)
+    lowDDataMat = meanRemoved * redEigVects # PCA 降维 A = V*diag(lambda)*V.T A*V = V*diag(lambda)*V.T*V = V*diag(lambda) (n*k)
     reconMat = (lowDDataMat*redEigVects.T)+meanVals # 恢复高维数据 redEigVects为正交矩阵,所以矩阵转置等于矩阵逆
-    print 'lowD',shape(lowDDataMat)
     return lowDDataMat,reconMat
 
 def replaceNanWithMean():

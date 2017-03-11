@@ -66,7 +66,9 @@ def svdEst(dataMat,user,simMeas,item):
     ratSimTotal = 0
     u,sigma,vt = la.svd(dataMat)
     Sig4 = mat(eye(4)*sigma[:4])
-    xformedItems = dataMat.T * u[:,:4] * Sig4.I # 为什么要用逆? SVD降维就是通过dataMat.T*U*sigma
+    xformedItems = dataMat.T * u[:,:4] * Sig4.I
+    # 降维 A.T*U*Sig4.I = (U*sigma*Vt).T*U*Sig4.I=V*Sig4.T*U.T*U*sig4.I=V(n*k)
+    # 个人认为 Sig4.I可以乘可以不乘
     for j in range(n):
         userRating = dataMat[user,j]
         if userRating == 0 or item == j: continue
@@ -129,7 +131,7 @@ if __name__=="__main__":
     # print u[:,:3]*sigma*vt[:3,:]
 
     dataMat = mat(loadExData())
-    result = recommend(dataMat,1,simMeas=cosSim,estMethod=svdEst)
+    result = recommend(dataMat,1,simMeas=cosSim)
     print result
 
     #计算90%信息时所需的奇异值数量
